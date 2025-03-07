@@ -18,6 +18,10 @@ const commands = {
     'w': {
         description: 'Warp to system (e.g., W0627)',
         action: warpToSystem
+    },
+    'i': {
+        description: 'Inspect system details (e.g., I or I0627)',
+        action: inspectSystem
     }
 };
 
@@ -36,19 +40,33 @@ function showHelp() {
     appendToOutput(`Available commands:\n${helpText}`);
 }
 
-function appendToOutput(text, isCommand = false) {
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function appendToOutput(text, isCommand = false) {
     const output = document.getElementById('output');
     const timestamp = new Date().toLocaleTimeString();
-    if (isCommand) {
-        output.innerHTML += `<span class="command-echo">[${timestamp}] > ${text}</span>\n`;
-    } else {
-        output.innerHTML += `[${timestamp}] ${text}\n`;
-    }
     
-    requestAnimationFrame(() => {
-        output.scrollTop = output.scrollHeight;
-        document.getElementById('commandInput').scrollIntoView();
-    });
+    // Convert text to array if it's not already
+    const lines = Array.isArray(text) ? text : text.split('\n');
+    
+    // Process each line with delay
+    for (const line of lines) {
+        if (line.length > 0) {  // Skip empty lines
+            await sleep(100);
+            if (isCommand) {
+                output.innerHTML += `<span class="command-echo">[${timestamp}] > ${line}</span>\n`;
+            } else {
+                output.innerHTML += `[${timestamp}] ${line}\n`;
+            }
+            
+            requestAnimationFrame(() => {
+                output.scrollTop = output.scrollHeight;
+                document.getElementById('commandInput').scrollIntoView();
+            });
+        }
+    }
 }
 
 async function displayNearestSystems() {
@@ -109,6 +127,57 @@ async function warpToSystem(commandText) {
     }
 }
 
+async function inspectSystem(commandText) {
+    const response = await fetch('star_systems.json');
+    const systems = await response.json();
+    
+    let targetSystem;
+    
+    if (commandText.length > 1) {
+        const systemId = commandText.toUpperCase().replace('I', 'SYS-');
+        targetSystem = systems.find(sys => sys.id === systemId);
+    } else {
+        targetSystem = systems.find(sys => 
+            sys.coordinates.x === playerPosition.x &&
+            sys.coordinates.y === playerPosition.y &&
+            sys.coordinates.z === playerPosition.z
+        );
+    }
+    
+    if (targetSystem) {
+        // Use array of strings for consistent delay handling
+        const output = [
+            `=== ${targetSystem.name} (${targetSystem.id}) ===`,
+            'Location:'.padEnd(12) + `X: ${Math.round(targetSystem.coordinates.x)}, Y: ${Math.round(targetSystem.coordinates.y)}, Z: ${Math.round(targetSystem.coordinates.z)}`,
+            'Distance:'.padEnd(12) + `${Math.round(calculateDistance(playerPosition, targetSystem.coordinates))} light years`,
+            'Brightness:'.padEnd(12) + targetSystem.brightness
+        ];
+
+        if (targetSystem.resources && targetSystem.resources.length > 0) {
+            output.push(
+                '',
+                'Resources:',
+                '+----------------+------------+-------------------+',
+                '| Resource       | Abundance  | Category          |',
+                '+----------------+------------+-------------------+'
+            );
+            
+            targetSystem.resources.forEach(resource => {
+                output.push(`| ${resource.name.padEnd(14)} | ${resource.abundance.toString().padEnd(10)} | ${resource.category.padEnd(17)} |`);
+            });
+            
+            output.push('+----------------+------------+-------------------+');
+        } else {
+            output.push('', 'No resources detected in this system.');
+        }
+
+        // Send all lines at once to appendToOutput
+        await appendToOutput(output);
+    } else {
+        await appendToOutput(`Error: System not found`);
+    }
+}
+
 // Initialize terminal
 function initTerminal() {
     document.getElementById('commandInput').addEventListener('keypress', function(e) {
@@ -119,6 +188,8 @@ function initTerminal() {
             
             if (command.startsWith('w')) {
                 warpToSystem(command);
+            } else if (command.startsWith('i')) {
+                inspectSystem(command);
             } else if (commands[command]) {
                 commands[command].action();
             } else if (command !== '') {

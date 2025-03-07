@@ -24,7 +24,40 @@ function gaussianRandom(mean = 0, sigma = 1) {
     return z0 * sigma + mean;
 }
 
-function generateStarSystems(count) {
+// Check if we're running in Node.js
+const isNode = typeof process !== 'undefined' && process.versions != null && process.versions.node != null;
+
+async function loadResources() {
+    if (isNode) {
+        // Node.js environment
+        const { readFile } = await import('fs/promises');
+        const resourcesData = JSON.parse(
+            await readFile(new URL('./mining_resources.json', import.meta.url))
+        );
+        return resourcesData;
+    } else {
+        // Browser environment
+        const response = await fetch('mining_resources.json');
+        return await response.json();
+    }
+}
+
+async function saveStarSystems(systems) {
+    if (isNode) {
+        // Node.js environment
+        const { writeFile } = await import('fs/promises');
+        await writeFile('star_systems.json', JSON.stringify(systems, null, 2));
+        console.log('Star systems saved to file');
+    } else {
+        // In browser, we don't save the file
+        console.log('Generated star systems for browser use');
+    }
+}
+
+// Modify the main generation function
+async function generateStarSystems(count) {
+    const resourcesData = await loadResources();
+    
     const systems = [];
     // Milky Way approximate dimensions in light years
     const radialSigma = 15000;    // Radial standard deviation
@@ -46,6 +79,15 @@ function generateStarSystems(count) {
         // Calculate brightness using gaussian distribution
         const brightness = Math.min(255, Math.max(0, gaussianRandom(brightnessMean, brightnessSigma)));
 
+        // Generate resources for this system
+        const systemResources = resourcesData.resources
+            .filter(resource => Math.random() * 100 < resource.scarcity_percent)
+            .map(resource => ({
+                name: resource.name,
+                category: resource.category,
+                abundance: Math.floor(Math.random() * 100) + 1 // Random abundance 1-100
+            }));
+
         // Convert to Cartesian coordinates
         const system = {
             id: `SYS-${i.toString().padStart(4, '0')}`,
@@ -55,7 +97,8 @@ function generateStarSystems(count) {
                 y: y,
                 z: r * Math.sin(theta)
             },
-            brightness: Math.round(brightness) // Round to nearest integer
+            brightness: Math.round(brightness), // Round to nearest integer
+            resources: systemResources
         };
         systems.push(system);
     }
@@ -63,13 +106,18 @@ function generateStarSystems(count) {
     return systems;
 }
 
-// Generate 1000 star systems
-const starSystems = generateStarSystems(1000);
+// Main execution
+async function main() {
+    const starSystems = await generateStarSystems(1000);
+    
+    if (isNode) {
+        // Show sample in console when running in Node
+        console.log('Sample of generated star systems:');
+        console.log(JSON.stringify(starSystems.slice(0, 5), null, 2));
+    }
+    
+    await saveStarSystems(starSystems);
+}
 
-// Display the first 5 systems as an example
-console.log('Sample of generated star systems:');
-console.log(JSON.stringify(starSystems.slice(0, 5), null, 2));
-
-// Optional: Save to file
-const fs = require('fs');
-fs.writeFileSync('star_systems.json', JSON.stringify(starSystems, null, 2));
+// Run the main function
+main().catch(console.error);
