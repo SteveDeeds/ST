@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Star Systems Visualization</title>
+    <style>
+        body { margin: 0; background-color: black; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.7/dat.gui.min.js"></script>
+    <script>
+        async function init() {
+            const response = await fetch('star_systems.json');
+            const starSystems = await response.json();
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100000);
+            const renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            // Create points with varying sizes and colors
+            const geometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(starSystems.length * 3);
+            const colors = new Float32Array(starSystems.length * 3);
+            const sizes = new Float32Array(starSystems.length);
+
+            starSystems.forEach((system, i) => {
+                // Position
+                positions[i * 3] = system.coordinates.x / 100;
+                positions[i * 3 + 1] = system.coordinates.y / 100;
+                positions[i * 3 + 2] = system.coordinates.z / 100;
+
+                // Color (brighter stars are more blue-white, dimmer are more red)
+                const brightness = system.brightness / 100;
+                colors[i * 3] = Math.min(0.5 + brightness * 0.5, 1.0);     // R
+                colors[i * 3 + 1] = Math.min(0.5 + brightness * 0.5, 1.0); // G
+                colors[i * 3 + 2] = Math.min(brightness + 0.2, 1.0);       // B
+
+                // Size based on brightness
+                sizes[i] = Math.max(1, system.brightness / 20);
+            });
+
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+            geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+
+            const material = new THREE.PointsMaterial({
+                size: 2,
+                sizeAttenuation: true,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.8
+            });
+
+            const points = new THREE.Points(geometry, material);
+            scene.add(points);
+
+            // Position camera
+            camera.position.z = 500;
+            camera.position.y = 100;
+            camera.lookAt(0, 0, 0);
+
+            // Animation
+            function animate() {
+                requestAnimationFrame(animate);
+                points.rotation.y += 0.0005;
+                renderer.render(scene, camera);
+            }
+
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+
+            animate();
+        }
+
+        init();
+    </script>
+</body>
+</html>

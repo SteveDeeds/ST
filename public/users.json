@@ -1,0 +1,50 @@
+{
+  "users": {
+    "uid_from_google_user_1": {
+      "userName": "SpaceExplorer42",
+      "email": "user1@example.com",
+      "displayName":"John Doe",
+      "photoURL": "https://example.com/profile1.jpg", 
+      "lastLogin": "2023-11-20T10:00:00.000Z",
+      "location": {
+        "systemId": "SYS-0881",
+        "coordinates": {
+            "x": -433.96976470936073,
+            "y": -166.92423305350826,
+            "z": 6671.9776232065
+        }
+      }
+    },
+    "uid_from_google_user_2": {
+      "userName": "StarPilot99",
+      "email": "user2@example.com",
+      "displayName": "Jane Smith",
+      "photoURL": "https://example.com/profile2.jpg",
+      "lastLogin": "2023-11-21T14:30:00.000Z",
+      "location": {
+        "systemId": "SYS-0881",
+        "coordinates": {
+            "x": -433.96976470936073,
+            "y": -166.92423305350826,
+            "z": 6671.9776232065
+        }
+      }
+    },
+    "uid_from_google_user_3":{
+          "userName": "NewGalacticUser",
+          "email": "newuser@example.com",
+          "displayName":"New User",
+          "photoURL": null,
+          "lastLogin": "2023-11-22T10:00:00.000Z",
+          "location": {
+              "systemId": "SYS-0881",
+              "coordinates": {
+                  "x": -433.96976470936073,
+                  "y": -166.92423305350826,
+                  "z": 6671.9776232065
+              }
+          }
+      }
+    
+  }
+}

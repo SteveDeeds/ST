@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Nearest Star Systems</title>
+    <style>
+        body {
+            background-color: #000;
+            color: #33ff33;
+            font-family: 'Courier New', monospace;
+            padding: 20px;
+            line-height: 1.4;
+        }
+        #terminal {
+            white-space: pre;
+        }
+        .system {
+            margin-bottom: 10px;
+            border-bottom: 1px solid #33ff33;
+            padding-bottom: 10px;
+        }
+        .header {
+            border-bottom: double #33ff33;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+        }
+        .blink {
+            animation: blink-animation 1s steps(5, start) infinite;
+        }
+        @keyframes blink-animation {
+            to {
+                visibility: hidden;
+            }
+        }
+        .prompt {
+            margin-top: 20px;
+            border-top: 1px solid #999999;
+            padding-top: 10px;
+        }
+        .command-input {
+            background: transparent;
+            border: none;
+            color: #999999;
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+            outline: none;
+            width: 80%;
+            caret-color: #999999;
+        }
+        .command-echo {
+            color: #999999;
+        }
+        #output {
+            height: 80vh;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+        }
+        #googleSignInButton {
+            margin-bottom: 10px;
+            background-color: #4285F4; /* Google Blue */
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        #googleSignInButton:hover{
+            background-color: #2b5aa1;
+        }
+    </style>
+</head>
+<body>
+    <div id="terminal">
+        <button id="googleSignInButton">Sign in with Google</button>  <!-- Button Here -->
+        <div id="output"></div>
+        <div class="prompt">
+            > <input type="text" class="command-input" id="commandInput" autofocus>
+        </div>
+    </div>
+
+    <script type="module" src="computer.js"></script>
+</body>
+</html>
