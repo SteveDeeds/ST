@@ -10,32 +10,23 @@
             padding: 20px;
             line-height: 1.4;
         }
+    
         #terminal {
             white-space: pre;
         }
-        .system {
-            margin-bottom: 10px;
-            border-bottom: 1px solid #33ff33;
-            padding-bottom: 10px;
+    
+        /* Hide elements that are not needed before sign in */
+        #output,
+        #signedInContent {
+            display: none;
         }
-        .header {
-            border-bottom: double #33ff33;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-        }
-        .blink {
-            animation: blink-animation 1s steps(5, start) infinite;
-        }
-        @keyframes blink-animation {
-            to {
-                visibility: hidden;
-            }
-        }
+    
         .prompt {
             margin-top: 20px;
             border-top: 1px solid #999999;
             padding-top: 10px;
         }
+    
         .command-input {
             background: transparent;
             border: none;
@@ -46,18 +37,22 @@
             width: 80%;
             caret-color: #999999;
         }
+    
         .command-echo {
             color: #999999;
         }
+    
         #output {
             height: 80vh;
             overflow-y: auto;
             margin-bottom: 20px;
             padding-bottom: 20px;
         }
+    
         #googleSignInButton {
             margin-bottom: 10px;
-            background-color: #4285F4; /* Google Blue */
+            background-color: #4285F4;
+            /* Google Blue */
             color: white;
             border: none;
             padding: 10px 15px;
@@ -68,17 +63,32 @@
             cursor: pointer;
             border-radius: 5px;
         }
-        #googleSignInButton:hover{
+    
+        #googleSignInButton:hover {
             background-color: #2b5aa1;
         }
+    
+        /* Show all elements when signed in */
+        body.signed-in #googleSignInButton,
+        body.signed-in #signInPrompt {
+            display: none;
+        }
+    
+        body.signed-in #output,
+        body.signed-in #signedInContent {
+            display: block;
+        }
     </style>
-</head>
+    </head>
 <body>
     <div id="terminal">
-        <button id="googleSignInButton">Sign in with Google</button>  <!-- Button Here -->
+        <button id="googleSignInButton">Sign in with Google</button>
+        <div id="signInPrompt">Please sign in to continue.</div>
         <div id="output"></div>
         <div class="prompt">
-            > <input type="text" class="command-input" id="commandInput" autofocus>
+            <div id="signedInContent">
+                > <input type="text" class="command-input" id="commandInput" autofocus>
+            </div>
         </div>
     </div>
 

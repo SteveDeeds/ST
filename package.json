@@ -1,18 +1,33 @@
 {
-  "dependencies": {
-    "@firebasegen/default-connector": "file:dataconnect-generated/js/default-connector",
-    "firebase": "^11.4.0",
-    "firebase-admin": "^13.2.0"
-  },
-  "devDependencies": {
-    "buffer": "^6.0.3",
-    "parcel": "^2.13.3",
-    "process": "^0.11.10"
-  },
+  "name": "st",
+  "version": "1.0.0",
+  "description": "Stellar Navigation Computer: A retro-style BBS terminal interface for navigating star systems.",
   "scripts": {
     "start": "parcel public/index.html",
-    "build": "parcel build public/index.html"
+    "build": "parcel build public/index.html",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-   "type": "module"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/your-username/your-repo.git"
+  },
+  "keywords": [
+    "firebase",
+    "terminal",
+    "star",
+    "system"
+  ],
+  "author": "Your Name",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/your-username/your-repo/issues"
+  },
+  "homepage": "https://github.com/your-username/your-repo#readme",
+  "type": "module",
+  "devDependencies": {
+    "parcel": "^2.10.3"
+  },
+  "dependencies": {
+    "firebase": "^10.7.1"
+  }
 }
-

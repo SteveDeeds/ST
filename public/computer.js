@@ -1,14 +1,5 @@
 // public/computer.js
 
-// Player's current position (will be loaded from Firestore)
-let playerPosition = {
-    x: 0,
-    y: 0,
-    z: 0
-};
-let playerName = "unknown";
-let playerId = "default";
-
 // Command definitions
 const commands = {
     '?': {
@@ -26,26 +17,37 @@ const commands = {
     'i': {
         description: 'Inspect system details (e.g., I or I0627)',
         action: inspectSystem
+    },
+    'signout': {
+        description: 'Signs out of your google account',
+        action: signOutUser
+    },
+    'clear': {
+        description: 'Clears the terminal',
+        action: clearTerminal
     }
 };
 
 // Firebase imports
-import { initializeApp, getApps, getApp } from "firebase/app";
-import { getFirestore, collection, getDocs, doc, getDoc } from "firebase/firestore";
-
-// Firebase configuration - Import from config file
-import { firebaseConfig } from '../firebaseConfig.js';
+import app from './firebase.js';
+import { getFirestore, collection, getDocs, doc, getDoc, updateDoc } from "firebase/firestore";
 
 // login imports
-import { login, createUser, logout, getUser, googleLogin } from './login.js';
-
-// Initialize Firebase - will only be called once
-let app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+import { createUser, logout, getUser, googleLogin } from './login.js';
 
 function getDB() {
     // Get a Firestore instance
     return getFirestore(app);
 }
+
+// Player's current position (will be loaded from Firestore)
+let playerPosition = {
+    x: 0,
+    y: 0,
+    z: 0
+};
+let playerName = "unknown";
+let playerId = "default";
 
 function calculateDistance(pos1, pos2) {
     if (!pos1 || !pos2 || typeof pos1 !== 'object' || typeof pos2 !== 'object' || !('x' in pos1) || !('y' in pos1) || !('z' in pos1) || !('x' in pos2) || !('y' in pos2) || !('z' in pos2)) {
@@ -172,6 +174,19 @@ async function warpToSystem(commandText) {
         playerPosition.x = targetSystem.coordinates.x;
         playerPosition.y = targetSystem.coordinates.y;
         playerPosition.z = targetSystem.coordinates.z;
+        // Get the db
+        const db = getDB();
+        // Get the user doc
+        const userRef = doc(db, 'users', playerId);
+        // Create the data to update
+        const data = {
+            location: {
+                systemId: systemId,
+                coordinates: playerPosition
+            }
+        }
+        // Update the db
+        await updateDoc(userRef, data);
 
         appendToOutput(`Arrived at ${targetSystem.name}`);
         displayVisibleSystems();
@@ -235,20 +250,25 @@ async function inspectSystem(commandText) {
 }
 
 // New function to fetch player data from Firestore
-async function fetchPlayerData() {
+async function fetchPlayerData(userId) {
     try {
-        //this is hard coded. should be changed in the future.
+        console.log("Fetching player data for user:", userId);
         const db = getDB();
-        const docRef = doc(db, "users", "kllrEIEs2MN08UMW7nJS");
+        const docRef = doc(db, "users", userId);
+        console.log("Document reference:", docRef);
         const docSnap = await getDoc(docRef);
+        console.log("Document snapshot id:", docSnap.id);
 
         if (docSnap.exists()) {
             const data = docSnap.data();
             if (data.location) {
+                console.log("Player data found");
                 playerPosition = data.location.coordinates; // Assuming 'location' is the field in your Firestore document
+                console.log("Player position loaded:", playerPosition);
                 playerName = data.userName; // Assuming 'userName' is the field
+                console.log("Player name loaded:", playerName);
                 playerId = docSnap.id;
-                console.log("Player data loaded:", playerPosition);
+                console.log("Player ID loaded:", playerId);
             } else {
                 console.log("Player position or name not found!");
                 await appendToOutput('Could not find player position or name');
@@ -264,28 +284,34 @@ async function fetchPlayerData() {
     }
 }
 
+async function clearTerminal() {
+    document.getElementById('output').innerHTML = "";
+}
+
+async function signOutUser() {
+    try {
+        await logout();
+        clearTerminal();
+        appendToOutput("Successfully logged out.");
+        document.body.classList.remove('signed-in');
+    } catch (e) {
+        appendToOutput(`There was an error trying to log out: ${e}`);
+    }
+}
+
 // Initialize terminal
 async function initTerminal() {
     const currentUser = await getUser();
     if (!currentUser) {
-        const result = await googleLogin();
-        if (!result.success) {
-            console.error('Login failed:', result.error);
-            await appendToOutput('Error: could not log in');
-        }
-        else {
-            await fetchPlayerData(); // Load player data first
-            if (!playerPosition) {
-                console.log("Player Position did not load")
-                return;
-            }
-        }
+        console.log("No current user.");
     } else {
-        await fetchPlayerData(); // Load player data first
+        console.log("Current user:", currentUser);
+        await fetchPlayerData(currentUser.uid); // Load player data first
         if (!playerPosition) {
             console.log("Player Position did not load")
             return;
         }
+        document.body.classList.add('signed-in');
     }
 
 
@@ -294,23 +320,54 @@ async function initTerminal() {
             const command = this.value.toLowerCase().trim();
             appendToOutput(command, true);  // Add true parameter for commands
             this.value = '';
-
-            if (command.startsWith('w')) {
+            if (commands[command]) {
+                commands[command].action();
+            } else if (command.startsWith('w')) {
                 warpToSystem(command);
             } else if (command.startsWith('i')) {
                 inspectSystem(command);
-            } else if (commands[command]) {
-                commands[command].action();
             } else if (command !== '') {
                 appendToOutput(`Unknown command: ${command}\nType ? for help`);
             }
         }
     });
+    // Get the commandInput element
+    const commandInput = document.getElementById('commandInput');
+    // Set focus on the command input
+    commandInput.focus();
 
     appendToOutput('=== STELLAR NAVIGATION COMPUTER v1.0 ===');
     appendToOutput('Type ? for available commands\n');
     displayVisibleSystems();
 }
 
-// Start the terminal when DOM is loaded
-document.addEventListener('DOMContentLoaded', initTerminal);
+// Function to handle successful Google sign-in
+async function handleGoogleSignInSuccess(result) {
+    console.log("Google login result:", result);
+    if (!result.success) {
+        console.error('Login failed:', result.error);
+        await appendToOutput('Error: could not log in');
+    }
+    else {
+        document.body.classList.add('signed-in');
+        await fetchPlayerData(result.user.uid); // Load player data first
+        if (!playerPosition) {
+            console.log("Player Position did not load")
+            return;
+        }
+        initTerminal();
+    }
+}
+
+async function googleSignIn() {
+    const result = await googleLogin();
+    handleGoogleSignInSuccess(result);
+}
+
+// Function to set up the sign-in button click handler
+function setupSignInButton() {
+    const signInButton = document.getElementById('googleSignInButton');
+    signInButton.addEventListener('click', googleSignIn);
+    initTerminal();
+}
+document.addEventListener('DOMContentLoaded', setupSignInButton);

@@ -22,6 +22,12 @@ Visit [https://stevedeeds.github.io/ST/](https://stevedeeds.github.io/ST/)
 2. Start a local server:
 ```bash
 cd public
-python -m http.server 8000
+npm start
 ```
 3. Visit `http://localhost:8000`
+
+## Production
+```bash
+npm run build
+firebase deploy --only hosting
+```

@@ -1,0 +1,37 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Users Collection Rules
+    match /users/{userId} {
+      // Allow a user to read their own data
+      allow read: if request.auth != null && request.auth.uid == userId;
+
+      // Allow a user to create their data if no data exists
+      allow create: if request.auth != null && !existsAfter(/databases/$(database)/documents/users/$(userId));
+
+      // Allow a user to update their own data
+      allow update: if request.auth != null && request.auth.uid == userId
+      && request.resource.data.keys().toSet().subtract(['userName', 'email','displayName','photoURL', 'lastLogin', 'location']).size() == 0;
+
+      //deny deleting
+      allow delete: if false;
+    }
+    // Star Systems Collection Rules
+    match /star_systems/{systemId} {
+      // Allow anyone to read star system data
+      allow read: if true;
+      // No one can write star system data (except maybe admin, which is not implemented here)
+      allow write: if false;
+    }
+
+    // Mining Resources Collection Rules
+    match /mining_resources/{resourceId} {
+      // Allow anyone to read mining resource data
+      allow read: if true;
+      // No one can write mining resource data
+      allow write: if false;
+    }
+  }
+}
+
