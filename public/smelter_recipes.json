@@ -1,0 +1,19 @@
+[
+    {
+      "name": "Glass",
+      "output": {
+        "item": "Glass",
+        "amount": 1
+      },
+      "ingredients": [
+        {
+          "item": "Silica",
+          "amount": 1.2
+        },
+        {
+          "item": "Energy",
+          "amount": 5
+        }
+      ]
+    }
+  ]
