@@ -5,6 +5,7 @@
         "item": "Glass",
         "amount": 1
       },
+      "duration": 2,
       "ingredients": [
         {
           "item": "Silica",
