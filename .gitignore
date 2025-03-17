@@ -67,10 +67,7 @@ node_modules/
 
 # dataconnect generated files
 .dataconnect
-<<<<<<< HEAD
 .parcel-cache/
 dataconnect-generated/js/default-connector/
-dist/
-=======
 node_modules/
->>>>>>> 7884f5b5ab9bc766faeba83f4bee4fea484fb011
+dist/
