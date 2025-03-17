@@ -1,124 +1,136 @@
 {
   "resources": [
     {
-      "name": "Iron (Fe)",
-      "category": "Common Metal",
-      "use_case": "Ship hulls, stations, construction",
+      "name": "Trees",
+      "category": "Organics",
+      "use_case": "Construction materials",
       "scarcity_percent": 70
     },
     {
-      "name": "Copper (Cu)",
-      "category": "Common Metal",
-      "use_case": "Wiring, electronics, energy systems",
-      "scarcity_percent": 60
-    },
-    {
-      "name": "Aluminum (Al)",
-      "category": "Common Metal",
-      "use_case": "Lightweight ship parts, fuel tanks",
-      "scarcity_percent": 55
-    },
-    {
-      "name": "Silicon (Si)",
-      "category": "Common Element",
-      "use_case": "Computer chips, solar panels",
-      "scarcity_percent": 50
-    },
-    {
-      "name": "Gold (Au)",
-      "category": "Precious Metal",
-      "use_case": "Advanced electronics, trade commodity",
-      "scarcity_percent": 20
-    },
-    {
-      "name": "Platinum (Pt)",
-      "category": "Precious Metal",
-      "use_case": "Catalysts, energy production, high-end trade",
-      "scarcity_percent": 15
-    },
-    {
-      "name": "Titanium (Ti)",
-      "category": "Precious Metal",
-      "use_case": "Strong ship frames, high-performance tech",
-      "scarcity_percent": 25
-    },
-    {
-      "name": "Palladium (Pd)",
-      "category": "Precious Metal",
-      "use_case": "Fuel cells, energy reactors",
-      "scarcity_percent": 10
-    },
-    {
-      "name": "Uranium (U)",
-      "category": "Energy Source",
-      "use_case": "Nuclear reactors, power generation",
-      "scarcity_percent": 12
-    },
-    {
-      "name": "Thorium (Th)",
-      "category": "Energy Source",
-      "use_case": "Alternative nuclear fuel",
-      "scarcity_percent": 8
-    },
-    {
-      "name": "Hydrogen (H2)",
-      "category": "Energy Source",
-      "use_case": "Fusion fuel, propulsion",
-      "scarcity_percent": 50
-    },
-    {
-      "name": "Helium-3 (He-3)",
-      "category": "Energy Source",
-      "use_case": "Advanced fusion energy",
+      "name": "Food crops",
+      "category": "Organics",
+      "use_case": "Food production",
       "scarcity_percent": 5
     },
     {
-      "name": "Neutronium",
-      "category": "Exotic Material",
-      "use_case": "Ultra-dense experimental tech",
-      "scarcity_percent": 1
-    },
-    {
-      "name": "Dark Matter Crystals",
-      "category": "Exotic Material",
-      "use_case": "High-energy weapons, warp drives",
-      "scarcity_percent": 0.5
-    },
-    {
-      "name": "Quantum Filaments",
-      "category": "Exotic Material",
-      "use_case": "Faster-than-light computing",
-      "scarcity_percent": 2
-    },
-    {
-      "name": "Voidstone",
-      "category": "Exotic Material",
-      "use_case": "Spacetime manipulation, teleportation",
-      "scarcity_percent": 0.5
-    },
-    {
-      "name": "Methane (CH4)",
-      "category": "Chemical Compound",
-      "use_case": "Fuel, terraforming",
-      "scarcity_percent": 40
-    },
-    {
-      "name": "Ammonia (NH3)",
-      "category": "Chemical Compound",
-      "use_case": "Life support, fuel reactions",
-      "scarcity_percent": 35
-    },
-    {
-      "name": "Carbon (C)",
-      "category": "Organic Compound",
-      "use_case": "Graphene production, fuel, organic synthesis",
+      "name": "Hydrocarbons",
+      "category": "Organics",
+      "use_case": "Fuel and plastic",
       "scarcity_percent": 60
     },
     {
-      "name": "Ice (H2O)",
-      "category": "Organic Compound",
-      "use_case": "Water, fuel production (hydrogen extraction)",
+      "name": "Brine",
+      "category": "Water",
+      "use_case": "Salt extraction, industrial chemicals",
+      "scarcity_percent": 40
+    },
+    {
+      "name": "Industrial water",
+      "category": "Water",
+      "use_case": "Low-grade construction material production",
+      "scarcity_percent": 10
+    },
+    {
+      "name": "Drinking water",
+      "category": "Water",
+      "use_case": "Life support",
+      "scarcity_percent": 5
+    },
+    {
+      "name": "Pure water",
+      "category": "Water",
+      "use_case": "High-grade chemical production",
+      "scarcity_percent": 1
+    },
+    {
+      "name": "Basalt",
+      "category": "Rock",
+      "use_case": "Basic construction material",
+      "scarcity_percent": 75
+    },
+    {
+      "name": "Silica",
+      "category": "Rock",
+      "use_case": "Refined into silicon for electronics",
       "scarcity_percent": 50
+    },
+    {
+      "name": "Limestone",
+      "category": "Rock",
+      "use_case": "Mid-range construction",
+      "scarcity_percent": 60
+    },
+    {
+      "name": "Precious stones",
+      "category": "Rock",
+      "use_case": "Luxury trade",
+      "scarcity_percent": 10
+    },
+    {
+      "name": "Common Metal",
+      "category": "Metal Ore",
+      "use_case": "Mid-range construction material",
+      "scarcity_percent": 50
+    },
+    {
+      "name": "Titanium",
+      "category": "Metal Ore",
+      "use_case": "High-end construction",
+      "scarcity_percent": 20
+    },
+    {
+      "name": "Precious Conductive Metals",
+      "category": "Metal Ore",
+      "use_case": "Electronics",
+      "scarcity_percent": 10
+    },
+    {
+      "name": "Radioactive Metals",
+      "category": "Metal Ore",
+      "use_case": "Nuclear energy, weapons",
+      "scarcity_percent": 10
+    },
+    {
+      "name": "Rare Earth Elements",
+      "category": "Metal Ore",
+      "use_case": "High-tech components",
+      "scarcity_percent": 5
+    },
+    {
+      "name": "Oxygen",
+      "category": "Atmospheric Gases",
+      "use_case": "Breathing",
+      "scarcity_percent": 20
+    },
+    {
+      "name": "Carbon Dioxide",
+      "category": "Atmospheric Gases",
+      "use_case": "Plant growth, terraforming",
+      "scarcity_percent": 30
+    },
+    {
+      "name": "Hydrogen",
+      "category": "Atmospheric Gases",
+      "use_case": "Fuel",
+      "scarcity_percent": 50
+    },
+    {
+      "name": "Sulfur Dioxide",
+      "category": "Atmospheric Gases",
+      "use_case": "Ore processing",
+      "scarcity_percent": 50
+    },
+    {
+      "name": "Methane",
+      "category": "Atmospheric Gases",
+      "use_case": "Fuel, industrial use",
+      "scarcity_percent": 40
+    },
+    {
+      "name": "Nitrogen",
+      "category": "Atmospheric Gases",
+      "use_case": "Agriculture, life support, industry",
+      "scarcity_percent": 30
     }
   ]
 }
