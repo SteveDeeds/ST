@@ -21,6 +21,7 @@ Visit [https://stevedeeds.github.io/ST/](https://stevedeeds.github.io/ST/)
 1. Clone the repository
 2. Start a local server:
 ```bash
+npm install
 cd public
 npm start
 ```
