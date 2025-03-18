@@ -4,133 +4,177 @@
       "name": "Trees",
       "category": "Organics",
       "use_case": "Construction materials",
-      "scarcity_percent": 70
+      "scarcity_percent": 70,
+      "min_consumption": 0,
+      "max_consumption": 100
     },
     {
       "name": "Food crops",
       "category": "Organics",
       "use_case": "Food production",
-      "scarcity_percent": 5
+      "scarcity_percent": 20,
+      "min_consumption": 1360,
+      "max_consumption": 1800
     },
     {
       "name": "Hydrocarbons",
       "category": "Organics",
       "use_case": "Fuel and plastic",
-      "scarcity_percent": 60
+      "scarcity_percent": 60,
+      "min_consumption": 0,
+      "max_consumption": 150
     },
     {
       "name": "Brine",
       "category": "Water",
       "use_case": "Salt extraction, industrial chemicals",
-      "scarcity_percent": 40
+      "scarcity_percent": 40,
+      "min_consumption": 0,
+      "max_consumption": 50
     },
     {
       "name": "Industrial water",
       "category": "Water",
       "use_case": "Low-grade construction material production",
-      "scarcity_percent": 10
+      "scarcity_percent": 10,
+      "min_consumption": 0,
+      "max_consumption": 80
     },
     {
       "name": "Drinking water",
       "category": "Water",
       "use_case": "Life support",
-      "scarcity_percent": 5
+      "scarcity_percent": 15,
+      "min_consumption": 75000,
+      "max_consumption": 380000
     },
     {
       "name": "Pure water",
       "category": "Water",
       "use_case": "High-grade chemical production",
-      "scarcity_percent": 1
+      "scarcity_percent": 1,
+      "min_consumption": 0,
+      "max_consumption": 100
     },
     {
       "name": "Basalt",
       "category": "Rock",
       "use_case": "Basic construction material",
-      "scarcity_percent": 75
+      "scarcity_percent": 75,
+      "min_consumption": 0,
+      "max_consumption": 90
     },
     {
       "name": "Silica",
       "category": "Rock",
       "use_case": "Refined into silicon for electronics",
-      "scarcity_percent": 50
+      "scarcity_percent": 50,
+      "min_consumption": 0,
+      "max_consumption": 100
     },
     {
       "name": "Limestone",
       "category": "Rock",
       "use_case": "Mid-range construction",
-      "scarcity_percent": 60
+      "scarcity_percent": 60,
+      "min_consumption": 0,
+      "max_consumption": 120
     },
     {
       "name": "Precious stones",
       "category": "Rock",
       "use_case": "Luxury trade",
-      "scarcity_percent": 10
+      "scarcity_percent": 10,
+      "min_consumption": 0,
+      "max_consumption": 10
     },
     {
       "name": "Common Metal",
       "category": "Metal Ore",
       "use_case": "Mid-range construction material",
-      "scarcity_percent": 50
+      "scarcity_percent": 50,
+      "min_consumption": 0,
+      "max_consumption": 150
     },
     {
       "name": "Titanium",
       "category": "Metal Ore",
       "use_case": "High-end construction",
-      "scarcity_percent": 20
+      "scarcity_percent": 20,
+      "min_consumption": 0,
+      "max_consumption": 50
     },
     {
       "name": "Precious Conductive Metals",
       "category": "Metal Ore",
       "use_case": "Electronics",
-      "scarcity_percent": 10
+      "scarcity_percent": 10,
+      "min_consumption": 0,
+      "max_consumption": 20
     },
     {
       "name": "Radioactive Metals",
       "category": "Metal Ore",
       "use_case": "Nuclear energy, weapons",
-      "scarcity_percent": 10
+      "scarcity_percent": 10,
+      "min_consumption": 0,
+      "max_consumption": 1
     },
     {
       "name": "Rare Earth Elements",
       "category": "Metal Ore",
       "use_case": "High-tech components",
-      "scarcity_percent": 5
+      "scarcity_percent": 5,
+      "min_consumption": 0,
+      "max_consumption": 25
     },
     {
       "name": "Oxygen",
       "category": "Atmospheric Gases",
       "use_case": "Breathing",
-      "scarcity_percent": 20
+      "scarcity_percent": 30,
+      "min_consumption": 790,
+      "max_consumption": 820
     },
     {
       "name": "Carbon Dioxide",
       "category": "Atmospheric Gases",
       "use_case": "Plant growth, terraforming",
-      "scarcity_percent": 30
+      "scarcity_percent": 30,
+      "min_consumption": 0,
+      "max_consumption": 150
     },
     {
       "name": "Hydrogen",
       "category": "Atmospheric Gases",
       "use_case": "Fuel",
-      "scarcity_percent": 50
+      "scarcity_percent": 50,
+      "min_consumption": 0,
+      "max_consumption": 200
     },
     {
       "name": "Sulfur Dioxide",
       "category": "Atmospheric Gases",
       "use_case": "Ore processing",
-      "scarcity_percent": 50
+      "scarcity_percent": 50,
+      "min_consumption": 0,
+      "max_consumption": 100
     },
     {
       "name": "Methane",
       "category": "Atmospheric Gases",
       "use_case": "Fuel, industrial use",
-      "scarcity_percent": 40
+      "scarcity_percent": 40,
+      "min_consumption": 0,
+      "max_consumption": 120
     },
     {
       "name": "Nitrogen",
       "category": "Atmospheric Gases",
       "use_case": "Agriculture, life support, industry",
-      "scarcity_percent": 30
+      "scarcity_percent": 30,
+      "min_consumption": 0,
+      "max_consumption": 150
     }
   ]
 }
