@@ -25,7 +25,9 @@
   "homepage": "https://github.com/your-username/your-repo#readme",
   "type": "module",
   "devDependencies": {
-    "parcel": "^2.10.3"
+    "buffer": "^6.0.3",
+    "parcel": "^2.13.3",
+    "process": "^0.11.10"
   },
   "dependencies": {
     "firebase": "^10.7.1"
