@@ -31,6 +31,8 @@ const commands = {
 // Firebase imports
 import app from './firebase.js';
 import { getFirestore, collection, getDocs, doc, getDoc, updateDoc } from "firebase/firestore";
+// import JSON data in public here
+import starSystemsData from './star_systems.json'; // Correct path
 
 // login imports
 import { createUser, logout, getUser, googleLogin } from './login.js';
@@ -74,7 +76,6 @@ function sleep(ms) {
 
 async function appendToOutput(text, isCommand = false) {
     const output = document.getElementById('output');
-    const timestamp = new Date().toLocaleTimeString();
 
     // Convert text to array if it's not already
     const lines = Array.isArray(text) ? text : text.split('\n');
@@ -84,9 +85,9 @@ async function appendToOutput(text, isCommand = false) {
         if (line.length > 0) {  // Skip empty lines
             await sleep(100);
             if (isCommand) {
-                output.innerHTML += `<span class="command-echo">[${timestamp}] > ${line}</span>\n`;
+                output.innerHTML += `<span class="command-echo"> > ${line}</span>\n`; // Keep command output
             } else {
-                output.innerHTML += `[${timestamp}] ${line}\n`;
+                output.innerHTML += `${line}\n`; // Keep regular output
             }
 
             requestAnimationFrame(() => {
@@ -98,22 +99,10 @@ async function appendToOutput(text, isCommand = false) {
 }
 
 async function fetchStarSystems() {
-    try {
-        const db = getDB();
-        const querySnapshot = await getDocs(collection(db, "star_systems"));
-        const systems = [];
-        querySnapshot.forEach((doc) => {
-            systems.push(doc.data());
-        });
-        return systems;
-    } catch (error) {
-        console.error("Error fetching star systems:", error);
-        appendToOutput("Error: Could not retrieve star system data.");
-        return [];
-    }
-}
+    return starSystemsData;
+  }
 
-async function displayVisibleSystems(minVisibility = 0.1) {
+async function displayVisibleSystems(max_distance = 1000) {
     const systems = await fetchStarSystems();
 
     if (systems.length === 0) {
@@ -127,38 +116,33 @@ async function displayVisibleSystems(minVisibility = 0.1) {
         return {
             ...system,
             distance: calculateDistance(playerPosition, system.coordinates),
-            visibility: system.brightness / calculateDistance(playerPosition, system.coordinates)
         }
     });
     // Filter systems based on minVisibility
-    const visibleSystems = systemsWithDistance.filter(system => system.visibility >= minVisibility);
+    const visibleSystems = systemsWithDistance.filter(system => system.distance >= max_distance);
 
     visibleSystems.sort((a, b) => a.distance - b.distance);
 
     const table = [
         '',
-        '+------------+----------------+-------------+------------------------+-----------+-------------+',
-        '| SYSTEM ID  | NAME           | DISTANCE    | COORDINATES (X, Y, Z)  | BRIGHT    | VISIBILITY  |',
-        '+------------+----------------+-------------+------------------------+-----------+-------------+',
+       //1234567890123456789012345678901234567890
+        '+-------+----------------+-------------+',
+        '| ID    | NAME           | DISTANCE    |',
+        '+-------+----------------+-------------+',
         ...visibleSystems.slice(0, 10).map(system => {
-            const x = Math.round(system.coordinates.x).toString().padStart(6);
-            const y = Math.round(system.coordinates.y).toString().padStart(6);
-            const z = Math.round(system.coordinates.z).toString().padStart(6);
-            const visibility = system.visibility.toFixed(2).padStart(11)
-            return `| ${system.id.padEnd(10)} | ${system.name.padEnd(14)} | ${Math.round(system.distance).toString().padEnd(8)} ly | ${x}, ${y}, ${z} | ${system.brightness.toString().padEnd(9)} | ${visibility} |`;
+            return `| ${system.id.padEnd(5)} | ${system.name.padEnd(14)} | ${Math.round(system.distance).toString().padEnd(8)} ly |`;
         }),
-        '+------------+----------------+-------------+------------------------+-----------+-------------+',
+        '+-------+----------------+-------------+',
         ''
     ].join('\n');
 
-    appendToOutput(`${playerName} is at: ${playerPosition.x}, ${playerPosition.y}, ${playerPosition.z}`);
-    appendToOutput(`Minimum system visibility: ${minVisibility}`);
+    await appendToOutput(`${playerName} is at: \n  ${playerPosition.x}, \n  ${playerPosition.y}, \n  ${playerPosition.z}`);
     appendToOutput(table);
 }
 
 async function warpToSystem(commandText) {
-    // Extract system ID from command (e.g., "W0627" -> "SYS-0627")
-    const systemId = commandText.toUpperCase().replace('W', 'SYS-');
+    // Extract system ID from command (e.g., "W0627" -> "0627")
+    const systemId = commandText.toUpperCase().replace('W', '');
 
     // Load systems data
     const systems = await fetchStarSystems();
@@ -187,6 +171,7 @@ async function warpToSystem(commandText) {
         }
         // Update the db
         await updateDoc(userRef, data);
+        console.log("user location stored:", data);
 
         appendToOutput(`Arrived at ${targetSystem.name}`);
         displayVisibleSystems();
@@ -205,7 +190,7 @@ async function inspectSystem(commandText) {
     let targetSystem;
 
     if (commandText.length > 1) {
-        const systemId = commandText.toUpperCase().replace('I', 'SYS-');
+        const systemId = commandText.toUpperCase().replace('I', '');
         targetSystem = systems.find(sys => sys.id === systemId);
     } else {
         targetSystem = systems.find(sys =>
@@ -228,16 +213,17 @@ async function inspectSystem(commandText) {
             output.push(
                 '',
                 'Resources:',
-                '+----------------+------------+-------------------+',
-                '| Resource       | Abundance  | Category          |',
-                '+----------------+------------+-------------------+'
+                //1234567890123456789012345678901234567890
+                '+-------------+-------+-----------------+',
+                '| Resource    | amt.  | Category        |',
+                '+-------------+-------+-----------------+'
             );
 
             targetSystem.resources.forEach(resource => {
-                output.push(`| ${resource.name.padEnd(14)} | ${resource.abundance.toString().padEnd(10)} | ${resource.category.padEnd(17)} |`);
+                output.push(`| ${resource.name.padEnd(11)} | ${resource.abundance.toString().padEnd(5)} | ${resource.category.padEnd(15)} |`);
             });
 
-            output.push('+----------------+------------+-------------------+');
+            output.push('+-------------+-------+-----------------+');
         } else {
             output.push('', 'No resources detected in this system.');
         }
@@ -368,6 +354,5 @@ async function googleSignIn() {
 function setupSignInButton() {
     const signInButton = document.getElementById('googleSignInButton');
     signInButton.addEventListener('click', googleSignIn);
-    initTerminal();
 }
 document.addEventListener('DOMContentLoaded', setupSignInButton);
